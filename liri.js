@@ -20,14 +20,11 @@ var inputString = process.argv;
 // Parses the command line argument to specify the database and search title
 var database = inputString[2];
 var title = inputString.slice(3);
-// console.log(title);
-// var titleArray = title.join(" ");
-// console.log(titleArray);
 
-function runSpotify() {
+function runSpotify(title) {
     // turning inputString array into single string for spotify search
-    var titleArray = title.join(" ");
-    spotify.search({ type: 'track', query: "" + titleArray + "" }, function (err, data) {
+    var titleString = title.join(" ");
+    spotify.search({ type: 'track', query: "" + titleString + "" }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
@@ -44,10 +41,10 @@ function runSpotify() {
     });
 }
 
-function runOMDB() {
+function runOMDB(title) {
     // turning inputString array into single string for OMDB search
-    var titleArray = title.join("+");
-    axios.get("http://www.omdbapi.com/?t=" + titleArray + "&y=&plot=short&apikey=trilogy").then(
+    var titleString = title.join("+");
+    axios.get("http://www.omdbapi.com/?t=" + titleString + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
             //console.log(response.data);
             // return title of the movie
@@ -70,27 +67,63 @@ function runOMDB() {
     );
 }
 
+
+function runBandsInTown(title) {
+    // turning inputString array into single string for BandsInTown search
+    var titleString = title.join("%20");
+    axios.get("https://rest.bandsintown.com/artists/" + titleString + "/events?app_id=codingbootcamp").then(
+        function (response) {
+            //console.log(response.data[0]);
+            // name of venue
+            console.log("Venue: " + response.data[0].venue.name);
+            // venue location
+            console.log("Venue Location: " + response.data[0].venue.city + " " + response.data[0].venue.region);
+            // date of the event - TODO: use moment.js to format this as MM/DD/YYY
+            console.log("Event Date: " + response.data[0].datetime);
+        }
+    )
+}
+
 function runReadFile() {
     // reading from random.txt file.
     fs.readFile("random.txt", "utf8", function (error, data) {
         if (error) {
             return console.log(error);
-        }
-        console.log(data);
+        };
+        //console.log(data);
+        // splitting data into an array
         var dataArr = data.split(",");
-        console.log(dataArr);
+        if (dataArr[0] === "spotify-this-song") {
+            runSpotify(dataArr[1].split(" "));
+        } else if (dataArr[0] === "movie-this") {
+            runOMDB(dataArr[1].split(" "));
+        } else if (dataArr[0] === "concert-this") {
+            runBandsInTown(dataArr[1].split(" "));
+        }
     });
 }
 
 // to figure out what category the user wants to search
-//if (database === "do-what-it-says") {
-    //runReadFile();
-    //} else if (database === "concert-this") {
-    //TODO: run the bandsintown function
-//} else if (database === "spotify-this-song") {
-    //runSpotify();
-//} else if (database === "movie-this") {
-    //runOMDB();
-//} else {
-    //console.log("Try typing in one of the following commands before your search term: concert-this, spotify-this-song, movie-this, or do-what-it-says. Thanks!")
-//}
+if (database === "do-what-it-says") {
+    runReadFile();
+} else if (database === "concert-this") {
+    if (title.length === 0) {
+        console.log("Please enter a band name.");
+    } else {
+        runBandsInTown(title);
+    }
+} else if (database === "spotify-this-song") {
+    if (title.length === 0) {
+        runSpotify(["The", "Sign", "Ace", "of", "base"]);
+    } else {
+        runSpotify(title);
+    }
+} else if (database === "movie-this") {
+    if (title.length === 0) {
+        runOMDB(["Mr.", "Nobody"]);
+    } else {
+        runOMDB(title);
+    }
+} else {
+    console.log("Try typing in one of the following commands before your search term: concert-this, spotify-this-song, movie-this, or do-what-it-says. Thanks!")
+}
