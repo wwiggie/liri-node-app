@@ -25,6 +25,7 @@ var title = inputString.slice(3);
 // console.log(titleArray);
 
 function runSpotify() {
+    // turning inputString array into single string for spotify search
     var titleArray = title.join(" ");
     spotify.search({ type: 'track', query: "" + titleArray + "" }, function (err, data) {
         if (err) {
@@ -43,12 +44,12 @@ function runSpotify() {
     });
 }
 
-//TODO: fix "lion+king" to title variable
 function runOMDB() {
-    axios.get("http://www.omdbapi.com/?t=lion+king&y=&plot=short&apikey=trilogy").then(
+    // turning inputString array into single string for OMDB search
+    var titleArray = title.join("+");
+    axios.get("http://www.omdbapi.com/?t=" + titleArray + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
             //console.log(response.data);
-
             // return title of the movie
             console.log("Title: " + response.data.Title);
             // return year the movie came out. TODO: convert to show year only with moment.js
