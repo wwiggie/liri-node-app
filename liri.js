@@ -15,6 +15,10 @@ var spotify = new Spotify({
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
 
+// As always, we grab the fs package to handle read/write.
+var fs = require("fs");
+
+
 // Takes in all of the command line arguments
 var inputString = process.argv;
 
@@ -48,7 +52,7 @@ function runOMDB() {
     axios.get("http://www.omdbapi.com/?t=lion+king&y=&plot=short&apikey=trilogy").then(
         function (response) {
             //console.log(response.data);
-            
+
             // return title of the movie
             console.log("Title: " + response.data.Title);
             // return year the movie came out. TODO: convert to show year only with moment.js
@@ -68,6 +72,17 @@ function runOMDB() {
         }
     );
 }
+
+// reading from random.txt file.
+fs.readFile("random.txt", "utf8", function (error, data) {
+    if (error) {
+        return console.log(error);
+    } 
+    console.log(data);
+    var dataArr = data.split(",");
+    console.log(dataArr);
+});
+
 
 // to figure out what category the user wants to search
 //if (database === "concert-this") {
