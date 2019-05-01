@@ -1,41 +1,37 @@
 // this reads and sets any environment variables with the dotenv package
 require("dotenv").config();
-
 // Add the code required to import the keys.js file and store it in a variable
 var keys = require("./keys.js");
-
 // following node-spotify-api documentation format
 var Spotify = require('node-spotify-api');
+// Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
+var axios = require("axios");
+// As always, we grab the fs package to handle read/write.
+var fs = require("fs");
 
 var spotify = new Spotify({
     id: keys.spotify.id,
     secret: keys.spotify.secret
 });
 
-// Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
-var axios = require("axios");
-
-// As always, we grab the fs package to handle read/write.
-var fs = require("fs");
-
-
 // Takes in all of the command line arguments
 var inputString = process.argv;
 
-// Parses the command line argument to specify the database and search titles
+// Parses the command line argument to specify the database and search title
 var database = inputString[2];
-var titles = inputString[3];
+var title = inputString.slice(3);
+// console.log(title);
+// var titleArray = title.join(" ");
+// console.log(titleArray);
 
-//TODO: fix "Sin Wagon" to titles variable
 function runSpotify() {
-    spotify.search({ type: 'track', query: "Sin Wagon" }, function (err, data) {
+    var titleArray = title.join(" ");
+    spotify.search({ type: 'track', query: "" + titleArray + "" }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-
         // to check the full response:
         //console.log(data.tracks.items[0]);
-
         // return the artist
         console.log("Artist: " + data.tracks.items[0].artists[0].name);
         // return the song's name
@@ -47,7 +43,7 @@ function runSpotify() {
     });
 }
 
-//TODO: fix "lion+king" to titles variable
+//TODO: fix "lion+king" to title variable
 function runOMDB() {
     axios.get("http://www.omdbapi.com/?t=lion+king&y=&plot=short&apikey=trilogy").then(
         function (response) {
@@ -73,26 +69,27 @@ function runOMDB() {
     );
 }
 
-// reading from random.txt file.
-fs.readFile("random.txt", "utf8", function (error, data) {
-    if (error) {
-        return console.log(error);
-    } 
-    console.log(data);
-    var dataArr = data.split(",");
-    console.log(dataArr);
-});
-
+function runReadFile() {
+    // reading from random.txt file.
+    fs.readFile("random.txt", "utf8", function (error, data) {
+        if (error) {
+            return console.log(error);
+        }
+        console.log(data);
+        var dataArr = data.split(",");
+        console.log(dataArr);
+    });
+}
 
 // to figure out what category the user wants to search
-//if (database === "concert-this") {
+//if (database === "do-what-it-says") {
+    //runReadFile();
+    //} else if (database === "concert-this") {
     //TODO: run the bandsintown function
 //} else if (database === "spotify-this-song") {
-   // runSpotify();
+    //runSpotify();
 //} else if (database === "movie-this") {
-    // runOMDB();
-//} else if (database === "do-what-it-says") {
-    //TODO: run do-what-it-says function
+    //runOMDB();
 //} else {
     //console.log("Try typing in one of the following commands before your search term: concert-this, spotify-this-song, movie-this, or do-what-it-says. Thanks!")
 //}
