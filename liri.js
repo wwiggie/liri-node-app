@@ -8,6 +8,8 @@ var Spotify = require('node-spotify-api');
 var axios = require("axios");
 // As always, we grab the fs package to handle read/write.
 var fs = require("fs");
+// including moment
+var moment = require('moment');
 
 var spotify = new Spotify({
     id: keys.spotify.id,
@@ -49,8 +51,8 @@ function runOMDB(title) {
             //console.log(response.data);
             // return title of the movie
             console.log("Title: " + response.data.Title);
-            // return year the movie came out. TODO: convert to show year only with moment.js
-            console.log("Released: " + response.data.Released);
+            // return year the movie came out.
+            console.log("Released: " + response.data.Released.slice(7));
             // return IMDB rating of the movie
             console.log("IMDB rating: " + response.data.Ratings[0].Value);
             // return rotten tomatoes rating of the movie
@@ -78,8 +80,10 @@ function runBandsInTown(title) {
             console.log("Venue: " + response.data[0].venue.name);
             // venue location
             console.log("Venue Location: " + response.data[0].venue.city + " " + response.data[0].venue.region);
-            // date of the event - TODO: use moment.js to format this as MM/DD/YYY
-            console.log("Event Date: " + response.data[0].datetime);
+            // date of the event - TODO: use moment.js to format this as MM/DD/YYYY
+            var date =  moment(response.data[0].datetime).format("MM/DD/YYYY");
+            //console.log(date);
+            console.log("Event Date: " + date);
         }
     )
 }
