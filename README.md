@@ -44,7 +44,8 @@ SPOTIFY_SECRET=your-spotify-secret
 ```
 You will also need your own API key to access the OMDB API. Add your own API key into the code in liri.js here (line 49):
 ```
-axios.get("http://www.omdbapi.com/?t=" + titleString + "&y=&plot=short&apikey=**trilogy**")
+axios.get("http://www.omdbapi.com/?t=" + titleString + "&y=&plot=short&apikey=trilogy")
 ```
 
 ## Demo video:
+https://drive.google.com/file/d/1Up8AUtcnd-TyfM-lauJYC2aS4RmMf6tw/view

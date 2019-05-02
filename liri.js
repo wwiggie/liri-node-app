@@ -6,7 +6,7 @@ var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
-// As always, we grab the fs package to handle read/write.
+// We grab the fs package to handle read/write.
 var fs = require("fs");
 // including moment
 var moment = require('moment');
