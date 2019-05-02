@@ -2,6 +2,9 @@ https://wneek018.github.io/liri-node-app/
 
 # liri-node-app using Spotify, OMDB and BandsinTown
 
+## Demo video:
+https://drive.google.com/file/d/1Up8AUtcnd-TyfM-lauJYC2aS4RmMf6tw/view
+
 ## What it does:
 This app allows the user to access movie, song and concert information based on the command given and song/movie/band name.
 
@@ -46,6 +49,3 @@ You will also need your own API key to access the OMDB API. Add your own API key
 ```
 axios.get("http://www.omdbapi.com/?t=" + titleString + "&y=&plot=short&apikey=trilogy")
 ```
-
-## Demo video:
-https://drive.google.com/file/d/1Up8AUtcnd-TyfM-lauJYC2aS4RmMf6tw/view
